@@ -14,6 +14,10 @@ import plotly.io as pio
 
 px.set_mapbox_access_token('pk.eyJ1IjoiZXdpbGxpYW1zMjAyMCIsImEiOiJja2FpdTIxOXMwM2wzMnFtbmVmb3IzZDJ6In0.TVsQ-iu8bN4PQLkBCr6tQQ')
 
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css',
+                        'https://raw.githubusercontent.com/elimywilliams/sc_covid19/master/header2.css'  ,
+                        'https://github.com/plotly/dash-app-stylesheets/blob/master/dash-oil-and-gas.css'
+                        ]
 
 import pandas as pd
 
@@ -278,9 +282,9 @@ def sumthing(thing):
     return(sum(thing))
 
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets,suppress_callback_exceptions=True,
+                 meta_tags=[{"name": "viewport", "content": "width=device-width"}]
+)
 server = app.server
 
 colors = {
@@ -432,6 +436,7 @@ def updateGraph(contents, filename):
     return (fig)
 
 
-
 if __name__ == '__main__':
     app.run_server(debug=False)
+
+
