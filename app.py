@@ -2,7 +2,7 @@ import base64
 import datetime
 import io
 import plotly.graph_objs as go
-import cufflinks as cf
+#import cufflinks as cf
 
 import dash
 from dash.dependencies import Input, Output, State
