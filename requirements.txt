@@ -31,6 +31,9 @@ bs4==0.0.1
 beautifulsoup4==4.7.1
 requests == 2.23.0
 pillow == 7.1.2
-swifter==1.0.3
 pygeos==0.7.1
+
+swifter==1.0.3
+toolz==0.10.0
+
 
