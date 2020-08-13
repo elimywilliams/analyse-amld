@@ -2,6 +2,7 @@ import base64
 import datetime
 import io
 import plotly.graph_objs as go
+import cufflinks as cf
 import dask
 import dash
 from dash.dependencies import Input, Output, State
@@ -285,6 +286,7 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets,suppress_cal
                  meta_tags=[{"name": "viewport", "content": "width=device-width"}]
 )
 
+server = app.server
 colors = {
     "graphBackground": "#F5F5F5",
     "background": "#ffffff",
