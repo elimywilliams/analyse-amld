@@ -2,7 +2,6 @@ import base64
 import datetime
 import io
 import plotly.graph_objs as go
-import cufflinks as cf
 import dask
 import dash
 from dash.dependencies import Input, Output, State
@@ -315,8 +314,18 @@ dcc.Upload(
 ),
     html.Div(id = "UploadConf"),
 #dcc.Graph(id='leakGraph'),
-html.Div(id='output-data-upload')
+    dash_table.DataTable(id='output-data-upload',
+                         columns=[{'name': 'ID', 'id': 'ID'},
+ {'name': 'DATE', 'id': 'DATE'},
+ {'name': 'LONGITUDE', 'id': 'LONGITUDE'},
+ {'name': 'LATITUDE', 'id': 'LATITUDE'},
+ {'name': 'Peak Name', 'id': 'Peak Name'}],
+
+                         )
+    #html.Div(id='output-data-upload')
 ])
+
+
 
 
 @app.callback(Output('Mygrapha', 'figure'), [
@@ -379,7 +388,7 @@ def updateWords(contents, filename):
         return("No file uploaded")
 
 
-@app.callback(Output('output-data-upload', 'children'),
+@app.callback(Output('output-data-upload', 'data'),
           [
 Input('upload-data', 'contents'),
 Input('upload-data', 'filename')
@@ -396,22 +405,8 @@ def update_table(contents, filename):
         df3.columns = ['Peak Name','LONGITUDE','LATITUDE','DATE']
         df3['ID']= df3.index
         df = df3.loc[:,['ID','DATE','LONGITUDE','LATITUDE','Peak Name']]
-        table = html.Div([
-            html.H5(str('Leaks found in: ') + str(filename)),
-            dash_table.DataTable(
-                data=df.to_dict('rows'),
-                columns=[{'name': i, 'id': i} for i in df.columns]
-            ),
-            html.Hr(),
-            html.Div('Raw Content'),
-            html.Pre(contents[0:200] + '...', style={
-                'whiteSpace': 'pre-wrap',
-                'wordBreak': 'break-all'
-            })
-        ])
-
-
-    return table
+        return(df.to_dict(orient='records'))
+    #return table
 
 
 @app.callback(Output('leakGrapha', 'figure'),
