@@ -2,7 +2,6 @@ import base64
 import datetime
 import io
 import plotly.graph_objs as go
-#import cufflinks as cf
 import dask
 import dash
 from dash.dependencies import Input, Output, State
@@ -14,10 +13,6 @@ import plotly.io as pio
 
 px.set_mapbox_access_token('pk.eyJ1IjoiZXdpbGxpYW1zMjAyMCIsImEiOiJja2FpdTIxOXMwM2wzMnFtbmVmb3IzZDJ6In0.TVsQ-iu8bN4PQLkBCr6tQQ')
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css',
-                        'https://raw.githubusercontent.com/elimywilliams/sc_covid19/master/header2.css'  ,
-                        'https://github.com/plotly/dash-app-stylesheets/blob/master/dash-oil-and-gas.css'
-                        ]
 
 import pandas as pd
 
@@ -282,9 +277,9 @@ def sumthing(thing):
     return(sum(thing))
 
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets,suppress_callback_exceptions=True,
-                 meta_tags=[{"name": "viewport", "content": "width=device-width"}]
-)
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 
 colors = {
@@ -313,7 +308,8 @@ dcc.Upload(
     # Allow multiple files to be uploaded
     multiple=True
 ),
-dcc.Graph(id='leakGraph'),
+    html.Div(id = "UploadConf"),
+#dcc.Graph(id='leakGraph'),
 html.Div(id='output-data-upload')
 ])
 
@@ -366,7 +362,16 @@ def parse_data(contents, filename):
 
     return df
 
-
+@app.callback(Output('UploadConf', 'children'),
+          [
+Input('upload-data', 'contents'),
+Input('upload-data', 'filename')
+])
+def updateWords(contents, filename):
+    if contents:
+        return("Yay, uploaded File")
+    elif not contents:
+        return("No file uploaded")
 
 
 @app.callback(Output('output-data-upload', 'children'),
@@ -436,7 +441,6 @@ def updateGraph(contents, filename):
     return (fig)
 
 
+
 if __name__ == '__main__':
     app.run_server(debug=False)
-
-
