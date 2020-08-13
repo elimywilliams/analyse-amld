@@ -11,6 +11,7 @@ import dash_table
 import plotly.express as px
 import plotly.io as pio
 import pandas as pd
+from shapely.geometry import Point
 
 px.set_mapbox_access_token(
     'pk.eyJ1IjoiZXdpbGxpYW1zMjAyMCIsImEiOiJja2FpdTIxOXMwM2wzMnFtbmVmb3IzZDJ6In0.TVsQ-iu8bN4PQLkBCr6tQQ')
@@ -168,10 +169,7 @@ def IdentifyPeaksAeris(xCar, proc_file, threshold='.1', xTimeThreshold='5.0', mi
         sPeriod5Min = ""
         prevIndex = 0
         for i in lstCH4_AB:
-            if (cnt == 0):
-                xLon1 = aLon[i];
-                xLat1 = aLat[i]
-            else:
+            if (cnt != 0):
                 # calculate distance between points
                 # xDist = haversine(xLat1, xLon1, aLat[i], aLon[i])
                 # xDistPeak += xDist
@@ -213,13 +211,11 @@ def IdentifyPeaksAeris(xCar, proc_file, threshold='.1', xTimeThreshold='5.0', mi
         if openFile.shape[0] != 0:
             tempCount = openFile.groupby('OP_NUM', as_index=False).OP_EPOCHSTART.count().rename(
                 columns={'OP_EPOCHSTART': 'Frequency'})
-            tempCount = tempCount.loc[tempCount.Frequency >= minElevated, :]
+            #tempCount = tempCount.loc[tempCount.Frequency >= minElevated, :]
             if tempCount.shape[0] == 0:
                 print("No Observed Peaks with enough Elevated Readings Found in the file: " + str(xFilename))
             elif tempCount.shape[0] != 0:
-                oFile = pd.merge(openFile, tempCount, on=['OP_NUM'])
-                openFile = oFile.copy()
-                del (oFile)
+                openFile = pd.merge(openFile.copy(), tempCount, on=['OP_NUM'])
                 openFile['minElevated'] = openFile.apply(lambda x: int(minElevated), axis=1)
                 openFile['OB_CH4_AB'] = openFile.loc[:, 'OB_CH4'].sub(openFile.loc[:, 'OB_CH4_BASELINE'], axis=0)
                 locIdentified = weightedLoc(openFile, 'OB_LAT', 'OB_LON', 'OP_NUM', 'OB_CH4_AB').loc[:, :].rename(
@@ -230,7 +226,6 @@ def IdentifyPeaksAeris(xCar, proc_file, threshold='.1', xTimeThreshold='5.0', mi
                 final['DATE'] = final.OB_DATETIME.swifter.apply(
                     lambda x: str(x[:4]) + str('-') + str(x[4:6]) + str('-') + str(x[6:8]))
                 final = final.drop(columns=['OB_DATETIME']).drop_duplicates().reset_index(drop=True)
-
                 return (final)
         elif openFile.shape[0] == 0:
             print("No Observed Peaks Found in the file: ")
@@ -413,10 +408,10 @@ def update_table(contents, filename):
         df2 = parse_data(contents, filename)
         proc_file = ProcessRawDataAerisTxt(df2, '45', '0')
         df3 = IdentifyPeaksAeris('truss', proc_file, '.1', '5.0', '2', '102', '50')
-        #df3.columns = ['Peak Name','LONGITUDE','LATITUDE','DATE']
-        #df3['ID']= df3.index
-        #df = df3.loc[:,['ID','DATE','LONGITUDE','LATITUDE','Peak Name']]
-        #return(df.to_dict(orient='records'))
+        df3.columns = ['Peak Name','LONGITUDE','LATITUDE','DATE']
+        df3['ID']= df3.index
+        df = df3.loc[:,['ID','DATE','LONGITUDE','LATITUDE','Peak Name']]
+        return(df.to_dict(orient='records'))
 
         return ([{'ID': 0,
                   'DATE': '2020-06-24',
