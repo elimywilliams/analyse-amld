@@ -401,6 +401,10 @@ def update_table(contents, filename):
         filename = filename[0]
         df2 = parse_data(contents, filename)
         proc_file = ProcessRawDataAerisTxt(df2, '45', '0')
+        df3 = IdentifyPeaksAeris('truss', proc_file, '.1', '5.0', '2', '102', '50')
+        #df3.columns = ['Peak Name','LONGITUDE','LATITUDE','DATE']
+        #df3['ID']= df3.index
+        #df = df3.loc[:,['ID','DATE','LONGITUDE','LATITUDE','Peak Name']]
         return([{'ID': 0,
   'DATE': '2020-06-24',
   'LONGITUDE': -86.62120710304784,
@@ -488,10 +492,7 @@ def update_table(contents, filename):
   'Peak Name': 'truss_1593070312.473'}])
 
         
-        #df3 = IdentifyPeaksAeris('truss', proc_file, '.1', '5.0', '2', '102', '50')
-        #df3.columns = ['Peak Name','LONGITUDE','LATITUDE','DATE']
-        #df3['ID']= df3.index
-        #df = df3.loc[:,['ID','DATE','LONGITUDE','LATITUDE','Peak Name']]
+        
         #return(df.to_dict(orient='records'))
     #return table
 
