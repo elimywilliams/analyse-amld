@@ -394,22 +394,20 @@ def update_table(contents, filename):
         df3.columns = ['Peak Name','LONGITUDE','LATITUDE','DATE']
         df3['ID']= df3.index
         df = df3.loc[:,['ID','DATE','LONGITUDE','LATITUDE','Peak Name']]
-        if type(df) == 'NoneType': #df == "None":
-            table = html.Div([])
-        elif type(df) != 'NoneType': #df != "None":
-            table = html.Div([
-                html.H5(str('Leaks found in: ') + str(filename)),
-                dash_table.DataTable(
-                    data=df.to_dict('rows'),
-                    columns=[{'name': i, 'id': i} for i in df.columns]
-                ),
-                html.Hr(),
-                html.Div('Raw Content'),
-                html.Pre(contents[0:200] + '...', style={
-                    'whiteSpace': 'pre-wrap',
-                    'wordBreak': 'break-all'
-                })
-            ])
+        table = html.Div([
+            html.H5(str('Leaks found in: ') + str(filename)),
+            dash_table.DataTable(
+                data=df.to_dict('rows'),
+                columns=[{'name': i, 'id': i} for i in df.columns]
+            ),
+            html.Hr(),
+            html.Div('Raw Content'),
+            html.Pre(contents[0:200] + '...', style={
+                'whiteSpace': 'pre-wrap',
+                'wordBreak': 'break-all'
+            })
+        ])
+
 
     return table
 
