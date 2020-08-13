@@ -397,6 +397,9 @@ def update_table(contents, filename):
     table = html.Div()
 
     if contents:
+        contents = contents[0]
+        filename = filename[0]
+        df2 = parse_data(contents, filename)
         return([{'ID': 0,
   'DATE': '2020-06-24',
   'LONGITUDE': -86.62120710304784,
@@ -482,9 +485,7 @@ def update_table(contents, filename):
   'LONGITUDE': -86.64330202695982,
   'LATITUDE': 33.65798853257548,
   'Peak Name': 'truss_1593070312.473'}])
-        #contents = contents[0]
-        #filename = filename[0]
-        #df2 = parse_data(contents, filename)
+
         #proc_file = ProcessRawDataAerisTxt(df2, '45', '0')
         #df3 = IdentifyPeaksAeris('truss', proc_file, '.1', '5.0', '2', '102', '50')
         #df3.columns = ['Peak Name','LONGITUDE','LATITUDE','DATE']
