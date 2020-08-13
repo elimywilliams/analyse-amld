@@ -10,11 +10,16 @@ import dash_html_components as html
 import dash_table
 import plotly.express as px
 import plotly.io as pio
+import pandas as pd
 
 px.set_mapbox_access_token('pk.eyJ1IjoiZXdpbGxpYW1zMjAyMCIsImEiOiJja2FpdTIxOXMwM2wzMnFtbmVmb3IzZDJ6In0.TVsQ-iu8bN4PQLkBCr6tQQ')
 
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css',
+                        'https://raw.githubusercontent.com/elimywilliams/sc_covid19/master/header2.css'  ,
+                        'https://github.com/plotly/dash-app-stylesheets/blob/master/dash-oil-and-gas.css'
+                        ]
 
-import pandas as pd
+
 
 def ProcessRawDataAerisTxt(read_file,maxSpeed = '45',minSpeed = '0'):
     import pandas as pd
@@ -276,11 +281,9 @@ def weightedLoc(df,lat,lon,by,val2avg):
 def sumthing(thing):
     return(sum(thing))
 
-
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-server = app.server
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets,suppress_callback_exceptions=True,
+                 meta_tags=[{"name": "viewport", "content": "width=device-width"}]
+)
 
 colors = {
     "graphBackground": "#F5F5F5",
