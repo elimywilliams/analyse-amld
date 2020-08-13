@@ -397,16 +397,102 @@ def update_table(contents, filename):
     table = html.Div()
 
     if contents:
-        contents = contents[0]
-        filename = filename[0]
-        df2 = parse_data(contents, filename)
-        proc_file = ProcessRawDataAerisTxt(df2, '45', '0')
-        df3 = IdentifyPeaksAeris('truss', proc_file, '.1', '5.0', '2', '102', '50')
-        df3.columns = ['Peak Name','LONGITUDE','LATITUDE','DATE']
-        df3['ID']= df3.index
-        df = df3.loc[:,['ID','DATE','LONGITUDE','LATITUDE','Peak Name']]
-        return(df.to_dict(orient='records'))
+        return([{'ID': 0,
+  'DATE': '2020-06-24',
+  'LONGITUDE': -86.62120710304784,
+  'LATITUDE': 33.68302728148634,
+  'Peak Name': 'truss_1593063686.886'},
+ {'ID': 1,
+  'DATE': '2020-06-25',
+  'LONGITUDE': -86.62073295472125,
+  'LATITUDE': 33.68317045660717,
+  'Peak Name': 'truss_1593065172.198'},
+ {'ID': 2,
+  'DATE': '2020-06-25',
+  'LONGITUDE': -86.60846417003943,
+  'LATITUDE': 33.7056524288853,
+  'Peak Name': 'truss_1593067722.675'},
+ {'ID': 3,
+  'DATE': '2020-06-25',
+  'LONGITUDE': -86.62218389431953,
+  'LATITUDE': 33.71340862795812,
+  'Peak Name': 'truss_1593068012.569'},
+ {'ID': 4,
+  'DATE': '2020-06-25',
+  'LONGITUDE': -86.60739171936703,
+  'LATITUDE': 33.70554932849144,
+  'Peak Name': 'truss_1593068864.844'},
+ {'ID': 5,
+  'DATE': '2020-06-25',
+  'LONGITUDE': -86.60387826689345,
+  'LATITUDE': 33.704339334480395,
+  'Peak Name': 'truss_1593068891.468'},
+ {'ID': 6,
+  'DATE': '2020-06-25',
+  'LONGITUDE': -86.60918400036996,
+  'LATITUDE': 33.698571389289995,
+  'Peak Name': 'truss_1593068980.556'},
+ {'ID': 7,
+  'DATE': '2020-06-25',
+  'LONGITUDE': -86.61338880739268,
+  'LATITUDE': 33.69751026472638,
+  'Peak Name': 'truss_1593069174.297'},
+ {'ID': 8,
+  'DATE': '2020-06-25',
+  'LONGITUDE': -86.62184583905041,
+  'LATITUDE': 33.69034363110077,
+  'Peak Name': 'truss_1593069255.398'},
+ {'ID': 9,
+  'DATE': '2020-06-25',
+  'LONGITUDE': -86.62862160742631,
+  'LATITUDE': 33.69036572590142,
+  'Peak Name': 'truss_1593069347.558'},
+ {'ID': 10,
+  'DATE': '2020-06-25',
+  'LONGITUDE': -86.62612803395639,
+  'LATITUDE': 33.69106766548004,
+  'Peak Name': 'truss_1593069369.062'},
+ {'ID': 11,
+  'DATE': '2020-06-25',
+  'LONGITUDE': -86.62690696218422,
+  'LATITUDE': 33.69088550818656,
+  'Peak Name': 'truss_1593069406.95'},
+ {'ID': 12,
+  'DATE': '2020-06-25',
+  'LONGITUDE': -86.6294050855361,
+  'LATITUDE': 33.69043505184934,
+  'Peak Name': 'truss_1593069512.422'},
+ {'ID': 13,
+  'DATE': '2020-06-25',
+  'LONGITUDE': -86.62114297119926,
+  'LATITUDE': 33.69028272974156,
+  'Peak Name': 'truss_1593070039.987'},
+ {'ID': 14,
+  'DATE': '2020-06-25',
+  'LONGITUDE': -86.62108632966275,
+  'LATITUDE': 33.68947925299543,
+  'Peak Name': 'truss_1593070063.539'},
+ {'ID': 15,
+  'DATE': '2020-06-25',
+  'LONGITUDE': -86.64211453918624,
+  'LATITUDE': 33.66010340592288,
+  'Peak Name': 'truss_1593070298.137'},
+ {'ID': 16,
+  'DATE': '2020-06-25',
+  'LONGITUDE': -86.64330202695982,
+  'LATITUDE': 33.65798853257548,
+  'Peak Name': 'truss_1593070312.473'}])
+        #contents = contents[0]
+        #filename = filename[0]
+        #df2 = parse_data(contents, filename)
+        #proc_file = ProcessRawDataAerisTxt(df2, '45', '0')
+        #df3 = IdentifyPeaksAeris('truss', proc_file, '.1', '5.0', '2', '102', '50')
+        #df3.columns = ['Peak Name','LONGITUDE','LATITUDE','DATE']
+        #df3['ID']= df3.index
+        #df = df3.loc[:,['ID','DATE','LONGITUDE','LATITUDE','Peak Name']]
+        #return(df.to_dict(orient='records'))
     #return table
+
 
 
 @app.callback(Output('leakGrapha', 'figure'),
