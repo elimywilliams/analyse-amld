@@ -396,7 +396,7 @@ def parse_data(contents, filename):
               ])
 def updateWords(contents, filename):
     if contents:
-        return ("Yay, uploaded File")
+        return ("File has been uploaded- it is being analysed now")
     elif not contents:
         return ("No file uploaded")
 
