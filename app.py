@@ -12,6 +12,10 @@ import plotly.express as px
 import plotly.io as pio
 import pandas as pd
 from shapely.geometry import Point
+import numpy as np
+import os
+from urllib.parse import quote as urlquote
+from flask import Flask, send_from_directory
 import geopandas as gpd
 
 px.set_mapbox_access_token(
@@ -66,8 +70,6 @@ def ProcessRawDataAerisTxt(read_file, maxSpeed='45', minSpeed='0'):
         wind_df4 = wind_df6.copy().drop_duplicates()
         wind_df = wind_df4.loc[wind_df4.CH4.notnull(), :]
         return (wind_df)
-
-
 def IdentifyPeaksAeris(xCar, proc_file, threshold='.1', xTimeThreshold='5.0', minElevated='2', xB='102', basePerc='50'):
     import csv, numpy
     import geopandas as gpd
@@ -233,8 +235,6 @@ def IdentifyPeaksAeris(xCar, proc_file, threshold='.1', xTimeThreshold='5.0', mi
     except ValueError:
         print("Error in Identify Peaks")
         return False
-
-
 def haversine(lat1, lon1, lat2, lon2, radius=6371):  # 6372.8 = earth radius in kilometers
     from math import radians, sin, cos, sqrt, asin
 
@@ -245,8 +245,6 @@ def haversine(lat1, lon1, lat2, lon2, radius=6371):  # 6372.8 = earth radius in 
     c = 2 * asin(sqrt(sin(dLat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dLon / 2) ** 2))
 
     return radius * c * 1000  # return in meters
-
-
 def weightedLoc(df, lat, lon, by, val2avg):
     import pandas as pd
     df_use = df.loc[:, [(lat), (lon), (by), val2avg]]
@@ -283,8 +281,6 @@ def weightedLoc(df, lat, lon, by, val2avg):
     toreturn = toreturn.rename(columns={'overall_LON': str(lon), 'overall_LAT': str(lat)})
 
     return (toreturn)
-
-
 def sumthing(thing):
     return (sum(thing))
 
@@ -320,6 +316,13 @@ app.layout = html.Div([
         # Allow multiple files to be uploaded
         multiple=True
     ),
+    html.A(
+        'Download Data',
+        id='download-link',
+        download="leakPoints.csv",
+        href="",
+        target="_blank"
+    ),
     html.Div(id="UploadConf"),
     # dcc.Graph(id='leakGraph'),
     dash_table.DataTable(id='output-data-upload',
@@ -331,6 +334,9 @@ app.layout = html.Div([
 
                          )
     # html.Div(id='output-data-upload')
+
+
+
 ])
 
 
@@ -409,9 +415,6 @@ def update_table(contents, filename):
         df2 = parse_data(contents, filename)
         proc_file = ProcessRawDataAerisTxt(df2, '45', '0')
         identified = IdentifyPeaksAeris('truss', proc_file, '.1', '5.0', '2', '102', '50')
-        import numpy as np
-
-
         try:
             df3 = identified.copy()
             df3.columns = ['Peak Name', 'LONGITUDE', 'LATITUDE', 'DATE']
@@ -421,18 +424,9 @@ def update_table(contents, filename):
             dummyarray = np.empty((1, 4))
             dummyarray[:] = np.nan
             df3 = pd.DataFrame(dummyarray, columns=column_names)
-
         df3['ID']= df3.index
         df = df3.loc[:,['ID','DATE','LONGITUDE','LATITUDE','Peak Name']]
-
         return(df.to_dict(orient='records'))
-    
-     
-
-        
-
-    # return table
-
 
 @app.callback(Output('leakGrapha', 'figure'),
               [
@@ -463,6 +457,18 @@ def updateGraph(contents, filename):
 
     return (fig)
 
+
+
+@app.callback(
+    dash.dependencies.Output('download-link', 'href'),
+    [dash.dependencies.Input('output-data-upload', 'data')
+     ])
+
+def update_download_link(data):
+    dff = pd.DataFrame(data)
+    csv_string = dff.to_csv(index=False, encoding='utf-8')
+    csv_string = "data:text/csv;charset=utf-8," + urlquote(csv_string)
+    return csv_string
 
 if __name__ == '__main__':
     app.run_server(debug=False)
