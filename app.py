@@ -12,6 +12,7 @@ import plotly.express as px
 import plotly.io as pio
 import pandas as pd
 from shapely.geometry import Point
+import geopandas as gpd
 
 px.set_mapbox_access_token(
     'pk.eyJ1IjoiZXdpbGxpYW1zMjAyMCIsImEiOiJja2FpdTIxOXMwM2wzMnFtbmVmb3IzZDJ6In0.TVsQ-iu8bN4PQLkBCr6tQQ')
